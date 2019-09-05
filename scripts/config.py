@@ -11,7 +11,7 @@ gridEff = 0.97
 lumi = lumi*gridEff
 
 samples = []
-samples_mc = ["www", "tz", "zz", "twz", "tt", "ttw", "ttzee", "wz"]
+samples_mc = ["wwz4l","www", "tz", "zz", "twz", "tt", "ttw", "ttzee", "wz"]
 #samples_mc = ["wz"]
 
 signal =  "twz"
@@ -34,6 +34,7 @@ colours = {
     "ttw": 5,
     "zz": 6,
     "www": 7,
+    "wwz4l": 8,
     "ttzee": 44,
     "data2015": 1,
     "data2016": 1
@@ -45,6 +46,7 @@ xSections = {
 "tt": 87.63,
 "twz": 0.016046,
 "www": 0.00757,
+"wwz4l": 0.0017966,
 "wz": 4.5,
 "zz": 1.269,
 "ttw": 0.603,
@@ -69,7 +71,9 @@ obs = {
 "h_nJets": TH1F("","", 6, -0.5, 5.5),
 "h_nTags": TH1F("","", 6, -0.5, 5.5),
 "h_mu": TH1F("","", 60, 0.0, 60),
-"h_MET": TH1F("","", 40, 0.0, 300)
+"h_MET": TH1F("","", 40, 0.0, 300),
+"h_ptvarcone20": TH1F("","", 40, 0.0, 5000),
+"h_topoetcone20": TH1F("","", 40, 0.0, 5000)
 }
 
 stacks = {}

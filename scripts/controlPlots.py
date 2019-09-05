@@ -52,7 +52,8 @@ for type in ["mc", "data"]:
             #print "sim weight = " + str(tree.weight_mc)
             else:
                 finalWeight =  1.0
-
+                    #if (tree.runNumber < 296939) | (tree.runNumber >311481):
+                    #break
 
             #final event selection
             #if (len(tree.jet_phi) != 1):
@@ -69,19 +70,19 @@ for type in ["mc", "data"]:
                 else:
                     nUntagged = nUntagged+1
 
-            config.histoGroups["h_nTags"][sample].Fill(nTagged,finalWeight)
-            config.histoGroups["h_MET"][sample].Fill(tree.met_met/1000.00,finalWeight)
-
-                    #for tag in tree.jet_isbtagged_MV2c10_77:
+                #for tag in tree.jet_isbtagged_MV2c10_77:
                     #print "tag "
                 #print hex(tree.jet_isbtagged_MV2c10_77[0])
                 #print str(tree.jet_isbtagged_MV2c10_77)
+                
 
 
             if ((tree.eemu_2015 == 1) | (tree.eemu_2016 == 1) ):
                 eNs = []
                 ePs = []
                 for el in range(0, len(tree.el_phi)):
+                    config.histoGroups["h_ptvarcone20"][sample].Fill(tree.el_ptvarcone20[el],finalWeight)
+                    config.histoGroups["h_topoetcone20"][sample].Fill(tree.el_topoetcone20[el],finalWeight)
                     elVec = PtEtaPhiEVector(tree.el_pt[el],tree.el_eta[el],tree.el_phi[el],tree.el_e[el])
                     if (tree.el_charge[el] != -1):
                         eNs.append(elVec)
@@ -90,11 +91,13 @@ for type in ["mc", "data"]:
                 
                 zCands = tools.makeZCands(eNs,ePs)
 
-                for zCand in zCands:
-                    config.histoGroups["h_mll_OSSF"][sample].Fill(zCand.M()/1000.00,finalWeight)
+                for zCand in zCands:                    config.histoGroups["h_mll_OSSF"][sample].Fill(zCand.M()/1000.00,finalWeight)
 
                 config.histoGroups["h_nJets"][sample].Fill(len(tree.jet_phi),finalWeight)
                 config.histoGroups["h_mu"][sample].Fill(tree.mu_actual,finalWeight)
+                config.histoGroups["h_nTags"][sample].Fill(nTagged,finalWeight)
+                config.histoGroups["h_MET"][sample].Fill(tree.met_met/1000.00,finalWeight)
+
 
 outputFile = TFile("histos.root", "RECREATE")
 
