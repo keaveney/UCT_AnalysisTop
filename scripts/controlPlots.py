@@ -80,6 +80,7 @@ for type in ["mc", "data"]:
             if ((tree.eemu_2015 == 1) | (tree.eemu_2016 == 1) ):
                 eNs = []
                 ePs = []
+                
                 for el in range(0, len(tree.el_phi)):
                     config.histoGroups["h_ptvarcone20"][sample].Fill(tree.el_ptvarcone20[el],finalWeight)
                     config.histoGroups["h_topoetcone20"][sample].Fill(tree.el_topoetcone20[el],finalWeight)
@@ -90,8 +91,14 @@ for type in ["mc", "data"]:
                         ePs.append(elVec)
                 
                 zCands = tools.makeZCands(eNs,ePs)
+                zCandsPP = tools.makeZCands(ePs,ePs)
+                zCandsNN = tools.makeZCands(eNs,eNs)
 
-                for zCand in zCands:                    config.histoGroups["h_mll_OSSF"][sample].Fill(zCand.M()/1000.00,finalWeight)
+                if(len(zCands) !=0): config.histoGroups["h_mll_OSSF"][sample].Fill(zCands[0].M()/1000.00,finalWeight)
+                if(len(zCandsPP)!=0): config.histoGroups["h_mll_SSSF"][sample].Fill(zCandsPP[0].M()/1000.00,finalWeight)
+                if(len(zCandsNN)!=0): config.histoGroups["h_mll_SSSF"][sample].Fill(zCandsNN[0].M()/1000.00,finalWeight)
+                if(len(zCandsPP)!=0): config.histoGroups["h_mll_PPSF"][sample].Fill(zCandsPP[0].M()/1000.00,finalWeight)
+                if(len(zCandsNN)!=0): config.histoGroups["h_mll_NNSF"][sample].Fill(zCandsNN[0].M()/1000.00,finalWeight)
 
                 config.histoGroups["h_nJets"][sample].Fill(len(tree.jet_phi),finalWeight)
                 config.histoGroups["h_mu"][sample].Fill(tree.mu_actual,finalWeight)

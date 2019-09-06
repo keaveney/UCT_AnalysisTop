@@ -3,7 +3,7 @@ from ROOT import THStack
 from ROOT import TCanvas
 
 #job progress (the numner of processed Events will be reported in multiples of reportEvery)
-reportEvery = 1000
+reportEvery = 10000
 
 #lumi = 3219.56
 lumi = 32988.1
@@ -68,10 +68,13 @@ st_mll_OSSF = THStack()
 
 obs = {
 "h_mll_OSSF": TH1F("","", 15, 0, 120),
+"h_mll_SSSF": TH1F("","", 5, 0, 120),
+"h_mll_PPSF": TH1F("","", 5, 0, 120),
+"h_mll_NNSF": TH1F("","", 5, 0, 120),
 "h_nJets": TH1F("","", 6, -0.5, 5.5),
 "h_nTags": TH1F("","", 6, -0.5, 5.5),
 "h_mu": TH1F("","", 60, 0.0, 60),
-"h_MET": TH1F("","", 40, 0.0, 300),
+"h_MET": TH1F("","", 25, 0.0, 300),
 "h_ptvarcone20": TH1F("","", 40, 0.0, 5000),
 "h_topoetcone20": TH1F("","", 40, 0.0, 5000)
 }

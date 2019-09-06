@@ -2,12 +2,14 @@ def makeZCands(lepsN, lepsP):
     zCands = []
     for n in range(0,len(lepsN)):
         for p in range(0,len(lepsP)):
-            cand = lepsN[n] + lepsP[p]
-            zCands.append(cand)
+            if(lepsN[n] != lepsP[p]):
+                cand = lepsN[n] + lepsP[p]
+                zCands.append(cand)
+    #order by pt
+    zCands.sort(key=lambda x: x.pt())
     return zCands
 
 
-#def makeObs():
 
 
 """
