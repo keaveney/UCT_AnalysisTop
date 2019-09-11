@@ -21,7 +21,8 @@ samples = samples_data + samples_mc
 pathStem = "../ntuples/"
 
 epochs = ["2016"]
-channels = ["eemu"] #doing multiple channels in one run not working yet
+channels = ["eemu"] 
+#channels = ["eemu", "eee", "mumue", "mumumu"] #doing multiple channels in one run not working yet
 
 treeName = "nominal"
 weightsTreeName = "sumWeights"
@@ -72,7 +73,7 @@ xSections = {
 #"ttzee": 0.041 #sigma nlo 0.759, BR W->lnu = 0.33. (0.759*0.33*0.33*0.0335)
 #}
 
-st_mll_OSSF = THStack()
+#st_mll_OSSF = THStack()
 
 obs = {
 "h_mll_OSSF": TH1F("","", 15, 0, 120),
@@ -95,11 +96,15 @@ obs = {
 stacks = {}
 histoGroups = {}
 
-for ob in obs:
-    stacks[ob] = THStack()
-    histoGroups[ob] = {}
-    for sample in samples:
-        hist = obs[ob].Clone()
-        hist.SetLineColor(colours[sample])
-        hist.SetFillColor(colours[sample])
-        histoGroups[ob][sample] = hist
+for channel in channels:
+    stacks[channel] = {}
+    histoGroups[channel] = {}
+    for ob in obs:
+        stacks[channel][ob] = THStack()
+        histoGroups[channel][ob] = {}
+        for sample in samples:
+            hist = obs[ob].Clone()
+            hist.SetLineColor(colours[sample])
+            hist.SetFillColor(colours[sample])
+            histoGroups[channel][ob][sample] = hist
+

@@ -7,6 +7,7 @@ from ROOT import TTree
 from ROOT import THStack
 from ROOT import TCanvas
 from ROOT import TLegend
+from ROOT import TLatex
 
 from ROOT.Math import PtEtaPhiEVector
 from itertools import combinations
@@ -183,51 +184,56 @@ for channel in config.channels:
                     #make z selection (require highest pt dilepton to be close to Z mass, possibly not optimal)
                     if(len(zCands) != 0):
                         #if (((zCands[0].mass()/1000.00) > 70.0 ) | ((zCands[0].mass()/1000.00) > 110.0 )):
-                        if(len(zCands) !=0): config.histoGroups["h_mll_OSSF"][sample].Fill(zCands[0].M()/1000.00,finalWeight)
-                        if(len(zCandsPP)!=0): config.histoGroups["h_mll_SSSF"][sample].Fill(zCandsPP[0].M()/1000.00,finalWeight)
-                        if(len(zCandsNN)!=0): config.histoGroups["h_mll_SSSF"][sample].Fill(zCandsNN[0].M()/1000.00,finalWeight)
-                        if(len(zCandsPP)!=0): config.histoGroups["h_mll_PPSF"][sample].Fill(zCandsPP[0].M()/1000.00,finalWeight)
-                        if(len(zCandsNN)!=0): config.histoGroups["h_mll_NNSF"][sample].Fill(zCandsNN[0].M()/1000.00,finalWeight)
+                        if(len(zCands) !=0): config.histoGroups[channel]["h_mll_OSSF"][sample].Fill(zCands[0].M()/1000.00,finalWeight)
+                        if(len(zCandsPP)!=0): config.histoGroups[channel]["h_mll_SSSF"][sample].Fill(zCandsPP[0].M()/1000.00,finalWeight)
+                        if(len(zCandsNN)!=0): config.histoGroups[channel]["h_mll_SSSF"][sample].Fill(zCandsNN[0].M()/1000.00,finalWeight)
+                        if(len(zCandsPP)!=0): config.histoGroups[channel]["h_mll_PPSF"][sample].Fill(zCandsPP[0].M()/1000.00,finalWeight)
+                        if(len(zCandsNN)!=0): config.histoGroups[channel]["h_mll_NNSF"][sample].Fill(zCandsNN[0].M()/1000.00,finalWeight)
 
-                        config.histoGroups["h_nJets"][sample].Fill(len(tree.jet_phi),finalWeight)
-                        config.histoGroups["h_mu"][sample].Fill(tree.mu_actual,finalWeight)
-                        config.histoGroups["h_nTags"][sample].Fill(len(bTaggedJets),finalWeight)
-                        config.histoGroups["h_MET"][sample].Fill(tree.met_met/1000.00,finalWeight)
-                        config.histoGroups["h_HT"][sample].Fill(ht/1000.00,finalWeight)
+                        config.histoGroups[channel]["h_nJets"][sample].Fill(len(tree.jet_phi),finalWeight)
+                        config.histoGroups[channel]["h_mu"][sample].Fill(tree.mu_actual,finalWeight)
+                        config.histoGroups[channel]["h_nTags"][sample].Fill(len(bTaggedJets),finalWeight)
+                        config.histoGroups[channel]["h_MET"][sample].Fill(tree.met_met/1000.00,finalWeight)
+                        config.histoGroups[channel]["h_HT"][sample].Fill(ht/1000.00,finalWeight)
                         if ((((zCands[0].mass()/1000.00) < 80.0 ) | ((zCands[0].mass()/1000.00) > 100.0 )) & (nTagged >1)):
-                            config.histoGroups["h_HT_ttcntrl"][sample].Fill(ht/1000.00,finalWeight)
-                        config.histoGroups["h_mlb"][sample].Fill(lepbCands[0].M()/1000.00,finalWeight)
-                        config.histoGroups["h_ptlb"][sample].Fill(lepbCands[0].pt()/1000.00,finalWeight)
-                        if(len(jjCands) !=0): config.histoGroups["h_mjj"][sample].Fill(jjCands[0].M()/1000.00,finalWeight)
-                        if(len(jjbCands) !=0): config.histoGroups["h_mjjb"][sample].Fill(jjbCands[0].M()/1000.00,finalWeight)
-                        if((len(lepbCands) !=0)& (len(zCands) !=0) ): config.histoGroups["h_delRmubZ"][sample].Fill(delRmubZ,finalWeight)
+                            config.histoGroups[channel]["h_HT_ttcntrl"][sample].Fill(ht/1000.00,finalWeight)
+                        config.histoGroups[channel]["h_mlb"][sample].Fill(lepbCands[0].M()/1000.00,finalWeight)
+                        config.histoGroups[channel]["h_ptlb"][sample].Fill(lepbCands[0].pt()/1000.00,finalWeight)
+                        if(len(jjCands) !=0): config.histoGroups[channel]["h_mjj"][sample].Fill(jjCands[0].M()/1000.00,finalWeight)
+                        if(len(jjbCands) !=0): config.histoGroups[channel]["h_mjjb"][sample].Fill(jjbCands[0].M()/1000.00,finalWeight)
+                        if((len(lepbCands) !=0)& (len(zCands) !=0) ): config.histoGroups[channel]["h_delRmubZ"][sample].Fill(delRmubZ,finalWeight)
     outputFileName = "histos" + channel + ".root"
     outputFile = TFile(outputFileName, "RECREATE")
 
-    for ob in config.histoGroups:
+for channel in config.channels:
+    for ob in config.obs:
         c = TCanvas();
         leg = TLegend(0.75,0.62,0.99,0.98)
         leg.SetTextSize(0.035)
         for sample in config.samples:
             if ("data" not in sample):
-                config.stacks[ob].Add(config.histoGroups[ob][sample],"HIST")
-                leg.AddEntry(config.histoGroups[ob][sample], sample, "f")
+                config.stacks[channel][ob].Add(config.histoGroups[channel][ob][sample],"HIST")
+                leg.AddEntry(config.histoGroups[channel][ob][sample], sample, "f")
             else:
-                sampleStr = sample + " " + str(config.histoGroups[ob][sample].Integral()) + " events"
-                leg.AddEntry(config.histoGroups[ob][sample], sampleStr, "E0p")
-                minY = (config.histoGroups[ob][sample].GetMinimum(0.0))*config.zoomFactorMin
-                maxY = (config.histoGroups[ob][sample].GetBinContent(config.histoGroups[ob][sample].GetMaximumBin()))*config.zoomFactorMax
+                sampleStr = sample + " " + str(config.histoGroups[channel][ob][sample].Integral()) + " events"
+                leg.AddEntry(config.histoGroups[channel][ob][sample], sampleStr, "E0p")
+                minY = (config.histoGroups[channel][ob][sample].GetMinimum(0.0))*config.zoomFactorMin
+                maxY = (config.histoGroups[channel][ob][sample].GetBinContent(config.histoGroups[channel][ob][sample].GetMaximumBin()))*config.zoomFactorMax
 
-        config.stacks[ob].SetMinimum(minY)
-        config.stacks[ob].SetMaximum(maxY)
+        config.stacks[channel][ob].SetMinimum(minY)
+        config.stacks[channel][ob].SetMaximum(maxY)
         xTitle = ob.split("_")[1]
-        config.stacks[ob].Draw()
-        config.histoGroups[ob]["data2016"].Draw("E0PSAME")
-        config.stacks[ob].GetXaxis().SetTitle(xTitle)
+        config.stacks[channel][ob].Draw()
+        config.histoGroups[channel][ob]["data2016"].Draw("E0PSAME")
+        config.stacks[channel][ob].GetXaxis().SetTitle(xTitle)
         leg.Draw()
+        latex = TLatex()
+        latex.SetTextSize(0.06)
+        latex.SetTextAlign(13)
+        latex.DrawLatexNDC(0.2,0.85,channel)
         
         canvasName = "../plots/" + channel + "/" + ob + "_" + channel + ".pdf"
         #c.SetLogy()
         c.SaveAs(canvasName)
         c.Write()
-    outputFile.Close()
+outputFile.Close()
