@@ -11,7 +11,7 @@ gridEff = 0.97
 lumi = lumi*gridEff
 
 samples = []
-samples_mc = ["wwz4l","www", "tz", "zz", "twz", "tt", "ttw", "ttzee", "wz"]
+samples_mc = ["wwz4l","www", "tz", "zz", "twz", "tt", "ttw", "ttzee", "wz", "ttH"]
 #samples_mc = ["wz"]
 
 signal =  "twz"
@@ -20,11 +20,17 @@ samples = samples_data + samples_mc
 
 pathStem = "../ntuples/"
 
+epochs = ["2016"]
+channels = ["eemu"] #doing multiple channels in one run not working yet
+
 treeName = "nominal"
 weightsTreeName = "sumWeights"
 
-zoomFactorMax = 5.0
-zoomFactorMin = 0.1
+#zoomFactorMax = 5.0
+#zoomFactorMin = 0.1
+
+zoomFactorMax = 1.3
+zoomFactorMin = 0.0
 
 colours = {
     "twz": 1,
@@ -35,6 +41,7 @@ colours = {
     "zz": 6,
     "www": 7,
     "wwz4l": 8,
+    "ttH": 9,
     "ttzee": 44,
     "data2015": 1,
     "data2016": 1
@@ -50,7 +57,8 @@ xSections = {
 "wz": 4.5,
 "zz": 1.269,
 "ttw": 0.603,
-"ttzee": 0.0413
+"ttzee": 0.0413,
+"ttH": 0.05343
 }
 
     #xSections = {
@@ -74,9 +82,14 @@ obs = {
 "h_nJets": TH1F("","", 6, -0.5, 5.5),
 "h_nTags": TH1F("","", 6, -0.5, 5.5),
 "h_mu": TH1F("","", 60, 0.0, 60),
+"h_mlb": TH1F("","", 20, 0.0, 1000),
+"h_ptlb": TH1F("","", 20, 0.0, 500),
+"h_mjj": TH1F("","", 20, 0.0, 500),
+"h_mjjb": TH1F("","", 20, 0.0, 500),
+"h_delRmubZ": TH1F("","", 15, -6.5, 6.5),
 "h_MET": TH1F("","", 25, 0.0, 300),
-"h_ptvarcone20": TH1F("","", 40, 0.0, 5000),
-"h_topoetcone20": TH1F("","", 40, 0.0, 5000)
+"h_HT": TH1F("","", 25, 0.0, 300),
+"h_HT_ttcntrl": TH1F("","", 25, 0.0, 300)
 }
 
 stacks = {}
