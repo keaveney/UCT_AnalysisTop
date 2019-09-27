@@ -49,12 +49,10 @@ for channel in config.channels:
                 if type == "mc":
                     #print "sample = " + str(sample) + " xsection = " + str(config.xSections[sample]) + " lumi = " + str(config.lumi)
                     normWeight = (config.xSections[sample]*config.lumi*tree.weight_mc)/(runningWeightSum)
-                    calibrationWeight =  tree.weight_pileup*tree.weight_leptonSF*tree.weight_jvt*tree.weight_bTagSF_MV2c10_77
+                    calibrationWeight =  tree.weight_pileup*tree.weight_globalLeptonTriggerSF*tree.weight_leptonSF*tree.weight_jvt*tree.weight_bTagSF_MV2c10_77
                     finalWeight =  normWeight*calibrationWeight
                 else:
                     finalWeight =  1.0
-                        #if (tree.runNumber < 296939) | (tree.runNumber >311481):
-                        #break
 
                 #apply 'pre-selection' on the basis of nutple flag
                 #check what channel we are processing first
@@ -126,6 +124,9 @@ for channel in config.channels:
                             nUntagged = nUntagged+1
                             unTaggedJets.append(jetVec)
 
+                    # retieve discriminat score for this event
+                    # event-level
+                
                     #calculate "global" variables
                     #HT
                     ht = 0.0
@@ -148,6 +149,8 @@ for channel in config.channels:
                         nonZlepsEta = tree.el_eta
                         nonZlepsPt = tree.el_pt
                         nonZlepsE = tree.el_e
+                    
+                    #need to remove leptons that were used to make Z from the nonZleps collection
 
                     for lep in range(0, len(nonZlepsPhi)):
                         for bTag in range(0, len(bTaggedJets)):
@@ -202,19 +205,23 @@ for channel in config.channels:
                         if(len(jjCands) !=0): config.histoGroups[channel]["h_mjj"][sample].Fill(jjCands[0].M()/1000.00,finalWeight)
                         if(len(jjbCands) !=0): config.histoGroups[channel]["h_mjjb"][sample].Fill(jjbCands[0].M()/1000.00,finalWeight)
                         if((len(lepbCands) !=0)& (len(zCands) !=0) ): config.histoGroups[channel]["h_delRmubZ"][sample].Fill(delRmubZ,finalWeight)
-    outputFileName = "histos" + channel + ".root"
-    outputFile = TFile(outputFileName, "RECREATE")
 
 for channel in config.channels:
+    outputFileName = "histos" + channel + ".root"
+    outputFile = TFile(outputFileName, "RECREATE")
     for ob in config.obs:
         c = TCanvas();
         leg = TLegend(0.75,0.62,0.99,0.98)
         leg.SetTextSize(0.035)
         for sample in config.samples:
             if ("data" not in sample):
+                config.histoGroups[channel][ob][sample].SetDirectory(outputFile)
+                config.histoGroups[channel][ob][sample].Write()
                 config.stacks[channel][ob].Add(config.histoGroups[channel][ob][sample],"HIST")
                 leg.AddEntry(config.histoGroups[channel][ob][sample], sample, "f")
             else:
+                config.histoGroups[channel][ob][sample].SetDirectory(outputFile)
+                config.histoGroups[channel][ob][sample].Write()
                 sampleStr = sample + " " + str(config.histoGroups[channel][ob][sample].Integral()) + " events"
                 leg.AddEntry(config.histoGroups[channel][ob][sample], sampleStr, "E0p")
                 minY = (config.histoGroups[channel][ob][sample].GetMinimum(0.0))*config.zoomFactorMin
@@ -236,4 +243,4 @@ for channel in config.channels:
         #c.SetLogy()
         c.SaveAs(canvasName)
         c.Write()
-outputFile.Close()
+    outputFile.Close()

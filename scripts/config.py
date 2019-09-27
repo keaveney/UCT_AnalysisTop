@@ -11,8 +11,8 @@ gridEff = 0.97
 lumi = lumi*gridEff
 
 samples = []
-samples_mc = ["wwz4l","www", "tz", "zz", "twz", "tt", "ttw", "ttzee", "wz", "ttH"]
-#samples_mc = ["wz"]
+#samples_mc = ["zzz4l","wwz4l","wzz3l","www", "tz", "zz", "twz", "tt", "ttw","zee","zmumu", "ttz_incl", "wz", "ttWW" "ttH", "tttt"]
+samples_mc = ["zzz4l","wwz4l","wzz3l","www", "tz", "zz", "twz", "tt", "ttw","zee","zmumu", "ttz_incl", "VVlll", "ttWW","ttH", "tttt"]
 
 signal =  "twz"
 samples_data = ["data2016"]
@@ -21,8 +21,8 @@ samples = samples_data + samples_mc
 pathStem = "../ntuples/"
 
 epochs = ["2016"]
-channels = ["eemu"] 
-#channels = ["eemu", "eee", "mumue", "mumumu"] #doing multiple channels in one run not working yet
+#channels = ["eemu", "mumue"]
+channels = ["eemu", "eee", "mumue", "mumumu"]
 
 treeName = "nominal"
 weightsTreeName = "sumWeights"
@@ -42,8 +42,17 @@ colours = {
     "zz": 6,
     "www": 7,
     "wwz4l": 8,
+    "zzz4l": 11,
+    "wzz3l": 12,
+    "zmumu": 13,
+    "VVlll": 14,
+    "ttWW": 15,
+    "tttt": 16,
     "ttH": 9,
+    "zee": 10,
     "ttzee": 44,
+    "ttzmumu": 46,
+    "ttz_incl": 47,
     "data2015": 1,
     "data2016": 1
 }
@@ -52,14 +61,26 @@ colours = {
 xSections = {
 "tz": 0.029584,
 "tt": 87.63,
+"zee": 1950.63,
+"zmumu": 1950.63,
 "twz": 0.016046,
 "www": 0.00757,
 "wwz4l": 0.0017966,
-"wz": 4.5,
+"zzz4l": 0.0000863731512,
+"wzz3l": 0.000747635474,
+#"wz": 4.5,
+"wz": 6.615, # assuming 1.47 (data/nlo) scale factor as seen in ATL-COM-PHYS-2016
 "zz": 1.269,
 "ttw": 0.603,
 "ttzee": 0.0413,
-"ttH": 0.05343
+"ttzmumu": 0.0413,
+"ttz_incl": 0.1239,
+"ttH": 0.05343,
+#"VVlll": 4.5832,
+# assuming 1.47 (data/nlo) scale factor as seen in ATL-COM-PHYS-2016
+"VVlll": 6.737,
+"ttWW": 0.0099,
+"tttt": 0.0092
 }
 
     #xSections = {
