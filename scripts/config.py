@@ -1,6 +1,10 @@
 from ROOT import TH1F
+from ROOT import TH2F
+
 from ROOT import THStack
 from ROOT import TCanvas
+from ROOT import TFile
+
 
 #job progress (the numner of processed Events will be reported in multiples of reportEvery)
 reportEvery = 10000
@@ -12,7 +16,9 @@ lumi = lumi*gridEff
 
 samples = []
 #samples_mc = ["zzz4l","wwz4l","wzz3l","www", "tz", "zz", "twz", "tt", "ttw","zee","zmumu", "ttz_incl", "wz", "ttWW" "ttH", "tttt"]
-samples_mc = ["zzz4l","wwz4l","wzz3l","www", "tz", "zz", "twz", "tt", "ttw","zee","zmumu", "ttz_incl", "VVlll", "ttWW","ttH", "tttt"]
+#samples_mc = ["zzz4l","wwz4l","wzz3l","www", "tz", "zz", "twz", "tt", "ttw","zee","zmumu", "ttz_incl", "VVlll", "ttWW","ttH", "tttt"]
+
+samples_mc = ["ttz_incl"]
 
 signal =  "twz"
 samples_data = ["data2016"]
@@ -21,11 +27,12 @@ samples = samples_data + samples_mc
 pathStem = "../ntuples/"
 
 epochs = ["2016"]
-#channels = ["eemu", "mumue"]
-channels = ["eemu", "eee", "mumue", "mumumu"]
+channels = ["eemu"]
+#channels = ["eemu", "eee", "mumue", "mumumu"]
 
 treeName = "nominal"
 weightsTreeName = "sumWeights"
+truthTreeName = "truth"
 
 #zoomFactorMax = 5.0
 #zoomFactorMin = 0.1
@@ -106,13 +113,23 @@ obs = {
 "h_mu": TH1F("","", 60, 0.0, 60),
 "h_mlb": TH1F("","", 20, 0.0, 1000),
 "h_ptlb": TH1F("","", 20, 0.0, 500),
-"h_mjj": TH1F("","", 20, 0.0, 500),
+"h_mjj": TH1F("","", 40, 0.0, 500),
+"h_mjj_W": TH1F("","", 30, 0.0, 400),
+"h_mjj_nonW": TH1F("","", 30, 0.0, 400),
+"h_delRj_Wdec": TH1F("","", 60, 0.0, 10),
+"h_delRjj_W1": TH1F("","", 20, 0.0, 10),
+"h_delRjj_W2": TH1F("","", 20, 0.0, 10),
 "h_mjjb": TH1F("","", 20, 0.0, 500),
 "h_delRmubZ": TH1F("","", 15, -6.5, 6.5),
 "h_MET": TH1F("","", 25, 0.0, 300),
 "h_HT": TH1F("","", 25, 0.0, 300),
 "h_HT_ttcntrl": TH1F("","", 25, 0.0, 300)
 }
+
+
+#make special (non-control plot) histos
+h_delR = TH2F("","",  20, 0.0, 500,20, 0.0, 10 )
+h_trueMw = TH1F("","",  30, 0.0,100 )
 
 stacks = {}
 histoGroups = {}
